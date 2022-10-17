@@ -1,5 +1,5 @@
 import pandas as pd
-class spoti():
+class Spotify():
     def __init__(self):
         self.spotify = pd.read_csv('Spotify_data.csv' , encoding="ISO-8859-1")
         print(self.spotify.columns)
@@ -13,14 +13,19 @@ class spoti():
     def top_songs(self):
         top_5_songs = self.spotify['trackName'].value_counts()[:5]
         top_5_songs.to_csv('/home/aziz/Documents/spotify/top_5_songs.csv')
-        with open('/home/aziz/Documents/spotify/top_5_songs.csv' , 'r+') as fb:
-            lines = fb.readlines()
-            fb.seek(0)
-            fb.truncate()
-            fb.writelines(lines[1:])
-        fb.close
+        with open('/home/aziz/Documents/spotify/top_5_songs.csv' , 'r+') as file:
+            lines = file.readlines()
+            file.seek(0)
+            file.truncate()
+            file.writelines(lines[1:])
+        file.close
         with open('/home/aziz/Documents/spotify/top_5_songs.csv', 'r') as original: data = original.read()
         with open('/home/aziz/Documents/spotify/top_5_songs.csv', 'w') as modified: modified.write("trackName,count\n" + data)
-
+    def top_artist():
+        pass
+    def top_artist_every_3_month():
+        pass
 if __name__ == '__main__':
-    spoti().top_songs()
+    Spotify.top_songs()
+    Spotify.top_artist()
+    Spotify.top_artist_every_3_month()
