@@ -10,22 +10,29 @@ class Spotify():
             pos = self.spotify.loc[i,'endTime'].rfind(' ') 
             self.spotify.loc[i,'time'] = self.spotify.loc[i,'endTime'][pos+1:]
             self.spotify.loc[i,'endTime'] = self.spotify.loc[i,'endTime'][:pos]
-    def top_songs(self):
-        top_5_songs = self.spotify['trackName'].value_counts()[:5]
-        top_5_songs.to_csv('/home/aziz/Documents/spotify/top_5_songs.csv')
-        with open('/home/aziz/Documents/spotify/top_5_songs.csv' , 'r+') as file:
+    def delete_the_first_line_in_file(self,ch):
+        with open('/home/aziz/Documents/spotify/'+ch+'.csv' , 'r+') as file:
             lines = file.readlines()
             file.seek(0)
             file.truncate()
             file.writelines(lines[1:])
         file.close
-        with open('/home/aziz/Documents/spotify/top_5_songs.csv', 'r') as original: data = original.read()
-        with open('/home/aziz/Documents/spotify/top_5_songs.csv', 'w') as modified: modified.write("trackName,count\n" + data)
-    def top_artist():
-        pass
-    def top_artist_every_3_month():
+    def top_songs(self):
+        top_5_songs = self.spotify['trackName'].value_counts()[:5]
+        top_5_songs.to_csv('/home/aziz/Documents/spotify/top_5_songs.csv')
+        self.delete_the_first_line_in_file('top_5_songs')
+        with open('/home/aziz/Documents/spotify/top_5_songs.csv', 'r') as file: data = file.read()
+        with open('/home/aziz/Documents/spotify/top_5_songs.csv', 'w') as file: file.write("trackName,count\n" + data)
+    def the_most_listned_song_artist(self):
+        maximum =  self.spotify['msPlayed'].max()
+        most_listened_music = self.spotify[self.spotify['msPlayed']==maximum]['trackName']
+        most_listened_music.to_csv('/home/aziz/Documents/spotify/the_most_listned_song_artist.csv')
+        self.delete_the_first_line_in_file('the_most_listned_song_artist')
+        with open('/home/aziz/Documents/spotify/the_most_listned_song_artist.csv', 'r') as file: data = file.read()
+        with open('/home/aziz/Documents/spotify/the_most_listned_song_artist.csv', 'w') as file: file.write("msPlayed,trackName\n" + data)
+    def top_artist_every_3_month(self):
         pass
 if __name__ == '__main__':
-    Spotify.top_songs()
-    Spotify.top_artist()
-    Spotify.top_artist_every_3_month()
+    top_songs = Spotify().top_songs()
+    the_most_listned_song_artist = Spotify().the_most_listned_song_artist()
+    top_artist_every_3_month = Spotify().top_artist_every_3_month()
